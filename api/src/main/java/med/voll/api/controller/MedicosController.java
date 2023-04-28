@@ -25,7 +25,7 @@ public class MedicosController {
 }
     @GetMapping
     public Page<DadosListagemMedico> listar(@PageableDefault(size = 3, page = 0, sort = {"nome"}) Pageable paginacao){ //PAGEABLE É PARA PAGINAR , DEIXAR PAGINADO
-        return repository.findAll(paginacao).map(DadosListagemMedico::new);//O findAll() RETORNAR TODAS AS PROPRIEDADES DA ENTIDADE. QUERO APENAS RETORNAR O QUE ESTÁ EM DADOSLISTAGEMMEDICO , E ASSIM É COMO SE DEVE FAZER PARA CONVERTER A ENTIDADE PARA O RECORD!!
+        return repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);//O findAll() RETORNAR TODAS AS PROPRIEDADES DA ENTIDADE. QUERO APENAS RETORNAR O QUE ESTÁ EM DADOSLISTAGEMMEDICO , E ASSIM É COMO SE DEVE FAZER PARA CONVERTER A ENTIDADE PARA O RECORD!!
 
     }
 
@@ -34,5 +34,11 @@ public class MedicosController {
     public void atualizar(@RequestBody @Valid DadosAtualizacaoMedico dados){
         var medico = repository.getReferenceById(dados.id()); //VARIAVEL MEDICO VAI BUSCAR TODOS OS CADASTROS JA FEITOS NO BANCO DE DADOS PARA PEGAR O MEDICO ESPECIFICO PARA ATUALIZAR
         medico.atualizarInformacoes(dados);
+    }
+    @DeleteMapping("/{id}") // ADICIONA O ID NA URL POR PADRÃO PARA DELETAR O MEDICO DE ACORDO COM O ID
+    @Transactional
+    public void excluir(@PathVariable Long id){
+       var medico = repository.getReferenceById(id);
+        medico.excluir();
     }
 }
