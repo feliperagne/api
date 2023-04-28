@@ -1,8 +1,8 @@
-package med.voll.api.medicos;
+package med.voll.api.domain.medicos;
 
 import jakarta.persistence.*;
 import lombok.*;
-import med.voll.api.endereco.Endereco;
+import med.voll.api.domain.endereco.Endereco;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +16,9 @@ public class Medico {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    @Column(unique = true)
     private String email;
+    @Column(unique = true)
     private String telefone;
     private String crm;
     @Enumerated(EnumType.STRING)
