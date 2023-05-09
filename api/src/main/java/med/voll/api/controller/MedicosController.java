@@ -20,6 +20,8 @@ public class MedicosController {
 
     @Autowired
     private MedicoRepository repository;
+
+
     @Transactional
     @PostMapping
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroMedico dados, UriComponentsBuilder uriComponentsBuilder){
@@ -30,6 +32,7 @@ public class MedicosController {
 
         return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico)); //MOSTRAR OS DADOS QUE FORAM SALVOS APÓS A INSERÇÃO
 }
+
     @GetMapping
     public ResponseEntity <Page<DadosListagemMedico>> listar(@PageableDefault(size = 3, page = 0, sort = {"nome"}) Pageable paginacao){ //PAGEABLE É PARA PAGINAR , DEIXAR PAGINADO
         var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);//O findAll() RETORNAR TODAS AS PROPRIEDADES DA ENTIDADE. QUERO APENAS RETORNAR O QUE ESTÁ EM DADOSLISTAGEMMEDICO , E ASSIM É COMO SE DEVE FAZER PARA CONVERTER A ENTIDADE PARA O RECORD!!
@@ -43,6 +46,8 @@ public class MedicosController {
         medico.atualizarInformacoes(dados);
         return ResponseEntity.ok( new DadosDetalhamentoMedico(medico));
     }
+
+
     @DeleteMapping("/{id}") // ADICIONA O ID NA URL POR PADRÃO PARA DELETAR O MEDICO DE ACORDO COM O ID
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id){
@@ -50,6 +55,8 @@ public class MedicosController {
         medico.excluir();
         return ResponseEntity.noContent().build();
     }
+
+
     @GetMapping("/{id}") // QUANDO ESCOLHER O ID PRA BUSCAR O MÉDICO , ELE VAI MOSTRAR TODOS OS DETALHES DO MEDICO QUE FOI ESCOLHIDO
     public ResponseEntity detalhar(@PathVariable Long id){
        var medico = repository.getReferenceById(id);
